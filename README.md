@@ -38,13 +38,13 @@ pip install -r requirements.txt
 ## 🚀 Usage
 
 ```bash
-python3 scanner.py <URL> <parameter>
+python3 lfi.py <URL> <parameter> 
 ```
 
 ### Example
 
 ```bash
-python3 scanner.py https://target.com/index.php page
+python3 lfi.py https://target.com/index.php page
 ```
 
 This will test payloads like:
